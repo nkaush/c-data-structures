@@ -1,8 +1,7 @@
 #pragma once
+#include "vector.h"
 #include "callbacks.h"
 #include "compare.h"
-#include "dictionary.h"
-#include "vector.h"
 #include <stdbool.h>
 #include <stdlib.h>
 
