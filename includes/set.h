@@ -58,7 +58,7 @@ typedef struct set set;
  * if two elements compare as equal, then they MUST have the same hash;
  * otherwise, accessing this set will result in undefined behavior.
  */
-set *set_create(hash_function_type hash_function, 
+set* set_create(hash_function_type hash_function, 
                 compare comp,
                 copy_constructor_type copy_constructor,
                 destructor_type destructor);
@@ -69,7 +69,7 @@ set *set_create(hash_function_type hash_function,
  * the set.
  * Complexity: O(|this|)
  */
-void set_destroy(set *this);
+void set_destroy(set* this);
 
 // Core Set-Theoretical Operations:
 //
@@ -82,32 +82,32 @@ void set_destroy(set *this);
  * Returns the union of sets 's' and 't'.
  * Complexity: O(|s| + |t|)
  */
-set *set_union(set *s, set *t);
+set* set_union(set* s, set* t);
 
 /**
  * Returns the intersection of sets 's' and 't'.
  * Complexity: O(min(|s|, |t|))
  */
-set *set_intersection(set *s, set *t);
+set* set_intersection(set* s, set* t);
 
 /**
  * Returns the difference of sets 's' and 't'.
  * Complexity: O(|t|)
  */
-set *set_difference(set *s, set *t);
+set* set_difference(set* s, set* t);
 
 /**
  * Returns whether 's' is a subset of 't'.
  * Complexity: O(|s|)
  */
-bool set_subset(set *s, set *t);
+bool set_subset(set* s, set* t);
 
 /**
  * Returns whether 's' equals 't'
  * (i.e. contain all and only the same elements).
  * Complexity: O(min(|s|, |t|))
  */
-bool set_equals(set *s, set *t);
+bool set_equals(set* s, set* t);
 
 // Static Set Operations:
 
@@ -115,7 +115,7 @@ bool set_equals(set *s, set *t);
  * Returns whether the set 'this' contains 'element'.
  * Complexity: O(1)
  */
-bool set_contains(set *this, void *element);
+bool set_contains(set* this, void* element);
 
 /**
  * Returns the element that equals 'element' in 'this', where equality is
@@ -124,19 +124,19 @@ bool set_contains(set *this, void *element);
  * It's undefined behavior if the element can't be found.
  * Complexity: O(1)
  */
-void *set_find(set *this, void *element);
+void* set_find(set* this, void* element);
 
 /**
  * Returns whether 'this' is empty.
  * Complexity: O(1)
  */
-bool set_empty(set *this);
+bool set_empty(set* this);
 
 /**
  * Returns the number of elements in 'this'.
  * Complexity: O(1)
  */
-size_t set_cardinality(set *this);
+size_t set_cardinality(set* this);
 
 /**
  * Returns a flat vector of the set's elements, for iteration. These elements
@@ -148,7 +148,7 @@ size_t set_cardinality(set *this);
  *
  * Complexity: O(|this|)
  */
-vector *set_elements(set *this);
+vector* set_elements(set* this);
 
 // Dynamic Set Operations:
 
@@ -156,19 +156,19 @@ vector *set_elements(set *this);
  * Adds an 'element' to 'this', if not already present.
  * Complexity: O(1)
  */
-void set_add(set *this, void *element);
+void set_add(set* this, void* element);
 
 /**
  * Removes an 'element' from 'this', if present.
  * Complexity: O(1)
  */
-void set_remove(set *this, void *element);
+void set_remove(set* this, void* element);
 
 /**
  * Removes all elements from 'this' and shrinks the set capacity to fit.
  * Complexity: O(|this|)
  */
-void set_clear(set *this);
+void set_clear(set* this);
 
 /**
  * Increase the capacity of this set (i.e. the maximum number of elements it
@@ -184,7 +184,7 @@ void set_clear(set *this);
  *
  * Complexity: O(|this|)
  */
-void set_reserve(set *this, size_t capacity);
+void set_reserve(set* this, size_t capacity);
 
 /**
  * Decrease the capacity of this set (i.e. the maximum number of elements it
@@ -201,7 +201,7 @@ void set_reserve(set *this, size_t capacity);
  *
  * Complexity: O(|this|)
  */
-void set_shrink_to_fit(set *this);
+void set_shrink_to_fit(set* this);
 
 /**
  * Set iteration macro. `setname` is the name of the set. `varname` is the name
@@ -211,7 +211,7 @@ void set_shrink_to_fit(set *this);
  *
  * Example usage:
  * ```
- *     set *s = string_set_create();
+ *     set* s = string_set_create();
  *     set_add(s, "Hi!"); set_add(s, "I'm");
  *     set_add(s, "Set"); set_add(s, "\n");
  *     SET_FOR_EACH(s, thing, {
@@ -225,9 +225,9 @@ void set_shrink_to_fit(set *this);
 #define SET_FOR_EACH(setname, varname, callback)       \
     do {                                               \
         size_t _len = set_cardinality(setname);        \
-        vector *_elements = set_elements(setname);     \
+        vector* _elements = set_elements(setname);     \
         for (size_t _i = 0; _i < _len; ++_i) {         \
-            void *varname = vector_get(_elements, _i); \
+            void* varname = vector_get(_elements, _i); \
             { callback; }                              \
         }                                              \
         vector_destroy(_elements);                     \
@@ -239,59 +239,59 @@ void set_shrink_to_fit(set *this);
  * Creates a set that performs no memory management and compares elements
  * purely by pointer value.
  */
-set *shallow_set_create(void);
+set* shallow_set_create(void);
 
 /**
  * Creates a set meant for string(s).
  */
-set *string_set_create(void);
+set* string_set_create(void);
 
 /**
  * Creates a set meant for char(s).
  */
-set *char_set_create(void);
+set* char_set_create(void);
 
 /**
  * Creates a set meant for double(s).
  */
-set *double_set_create(void);
+set* double_set_create(void);
 
 /**
  * Creates a set meant for float(s).
  */
-set *float_set_create(void);
+set* float_set_create(void);
 
 /**
  * Creates a set meant for int(s).
  */
-set *int_set_create(void);
+set* int_set_create(void);
 
 /**
  * Creates a set meant for long(s).
  */
-set *long_set_create(void);
+set* long_set_create(void);
 
 /**
  * Creates a set meant for short(s).
  */
-set *short_set_create(void);
+set* short_set_create(void);
 
 /**
  * Creates a set meant for unsigned char(s).
  */
-set *unsigned_char_set_create(void);
+set* unsigned_char_set_create(void);
 
 /**
  * Creates a set meant for unsigned int(s).
  */
-set *unsigned_int_set_create(void);
+set* unsigned_int_set_create(void);
 
 /**
  * Creates a set meant for unsigned long(s).
  */
-set *unsigned_long_set_create(void);
+set* unsigned_long_set_create(void);
 
 /**
  * Creates a set meant for unsigned short(s).
  */
-set *unsigned_short_set_create(void);
+set* unsigned_short_set_create(void);
