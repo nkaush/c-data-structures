@@ -47,7 +47,7 @@ typedef struct graph graph;
  * If you supply NULL for the compare then elements will be compared by their
  * virtual address (pointer value).
  */
-graph *graph_create(hash_function_type vertex_hash_function,
+graph* graph_create(hash_function_type vertex_hash_function,
                     compare vertex_comp,
 
                     copy_constructor_type vertex_key_copy_constructor,
@@ -65,7 +65,7 @@ graph *graph_create(hash_function_type vertex_hash_function,
  * graph.
  * Complexity: O(V+E)
  */
-void graph_destroy(graph *this);
+void graph_destroy(graph* this);
 
 // Graph Connectivity Functions:
 
@@ -76,7 +76,7 @@ void graph_destroy(graph *this);
  * result in undefined behavior.
  * Complexity: O(1)
  */
-bool graph_adjacent(graph *this, void *s, void *t);
+bool graph_adjacent(graph* this, void* s, void* t);
 
 /**
  * Returns a vector containing all vertex keys 't' in 'this' such that 't' is
@@ -91,7 +91,7 @@ bool graph_adjacent(graph *this, void *s, void *t);
  * behavior.
  * Complexity: O(degree(s))
  */
-vector *graph_neighbors(graph *this, void *s);
+vector* graph_neighbors(graph* this, void* s);
 
 /**
  * Returns a vector containing all vertex keys 's' in 'this' such that 't' is
@@ -106,7 +106,7 @@ vector *graph_neighbors(graph *this, void *s);
  * behavior.
  * Complexity: O(antidegree(t))
  */
-vector *graph_antineighbors(graph *this, void *t);
+vector* graph_antineighbors(graph* this, void* t);
 
 /**
  * Returns the number of neighbors of a graph vertex with key 's'.
@@ -115,7 +115,7 @@ vector *graph_antineighbors(graph *this, void *t);
  * behavior.
  * Complexity: O(1)
  */
-size_t graph_vertex_degree(graph *this, void *s);
+size_t graph_vertex_degree(graph* this, void* s);
 
 /**
  * Returns the number of antineighbors of a graph vertex with key 't'.
@@ -124,7 +124,7 @@ size_t graph_vertex_degree(graph *this, void *s);
  * behavior.
  * Complexity: O(1)
  */
-size_t graph_vertex_antidegree(graph *this, void *t);
+size_t graph_vertex_antidegree(graph* this, void* t);
 
 // Vertex Functions:
 
@@ -134,19 +134,19 @@ size_t graph_vertex_antidegree(graph *this, void *t);
  * in the graph and therefore should not be destroyed.
  * Complexity: O(V)
  */
-vector *graph_vertices(graph *this);
+vector* graph_vertices(graph* this);
 
 /**
  * Returns the number of vertices in the graph.
  * Complexity: O(1)
  */
-size_t graph_vertex_count(graph *this);
+size_t graph_vertex_count(graph* this);
 
 /**
  * Returns whether there exists a vertex with key 'key' in 'this'.
  * Complexity: O(1)
  */
-bool graph_contains_vertex(graph *this, void *key);
+bool graph_contains_vertex(graph* this, void* key);
 
 /**
  * Adds a vertex with 'key' to 'this'. The value associated with this vertex
@@ -158,7 +158,7 @@ bool graph_contains_vertex(graph *this, void *key);
  * WARNING: The vertex value copy constructor and destructor must handle NULL
  * if this method is to be used.
  */
-void graph_add_vertex(graph *this, void *key);
+void graph_add_vertex(graph* this, void* key);
 
 /**
  * Removes a vertex with 'key' from 'this' and its associated value.
@@ -168,7 +168,7 @@ void graph_add_vertex(graph *this, void *key);
  * in undefined behavior.
  * Complexity: O(degree(key) + antidegree(key))
  */
-void graph_remove_vertex(graph *this, void *key);
+void graph_remove_vertex(graph* this, void* key);
 
 /**
  * Gets the value associated with the vertex 'key' in 'this'. The return value
@@ -178,7 +178,7 @@ void graph_remove_vertex(graph *this, void *key);
  * in undefined behavior.
  * Complexity: O(1)
  */
-void *graph_get_vertex_value(graph *this, void *key);
+void* graph_get_vertex_value(graph* this, void* key);
 
 /**
  * Sets the value associated with the vertex 'key' in 'this' to 'value'.
@@ -187,7 +187,7 @@ void *graph_get_vertex_value(graph *this, void *key);
  * replaced with 'value'.
  * Complexity: O(1)
  */
-void graph_set_vertex_value(graph *this, void *key, void *value);
+void graph_set_vertex_value(graph* this, void* key, void* value);
 
 // Edge Functions:
 
@@ -195,7 +195,7 @@ void graph_set_vertex_value(graph *this, void *key, void *value);
  * Returns the number of edges in this graph.
  * Complexity: O(1)
  */
-size_t graph_edge_count(graph *this);
+size_t graph_edge_count(graph* this);
 
 /**
  * Adds a directed edge from 's' to 't'. The value associated with this edge
@@ -208,7 +208,7 @@ size_t graph_edge_count(graph *this);
  * WARNING: The edge value copy constructor and destructor must handle NULL
  * values if this method is to be used.
  */
-void graph_add_edge(graph *this, void *s, void *t);
+void graph_add_edge(graph* this, void* s, void* t);
 
 /**
  * Removes the directed edge from 's' to 't' and it's associated value.
@@ -217,7 +217,7 @@ void graph_add_edge(graph *this, void *s, void *t);
  * must exist, or this method will result in undefined behavior.
  * Complexity: O(1)
  */
-void graph_remove_edge(graph *this, void *s, void *t);
+void graph_remove_edge(graph* this, void* s, void* t);
 
 /**
  * Gets the value associated with the directed edge from 's' to 't' in 'this'.
@@ -227,7 +227,7 @@ void graph_remove_edge(graph *this, void *s, void *t);
  * must exist, or this method will result in undefined behavior.
  * Complexity: O(1)
  */
-void *graph_get_edge_value(graph *this, void *s, void *t);
+void* graph_get_edge_value(graph* this, void* s, void* t);
 
 /**
  * Sets the value associated with the the directed edge from 's' to 't' in
@@ -240,10 +240,10 @@ void *graph_get_edge_value(graph *this, void *s, void *t);
  * must exist, or this method will result in undefined behavior.
  * Complexity: O(1)
  */
-void graph_set_edge_value(graph *this, void *s, void *t, void *value);
+void graph_set_edge_value(graph* this, void* s, void* t, void* value);
 
 /**
  * Creates a graph that manages no memory and compares vertex keys by their
  * virtual addresses.
  */
-graph *shallow_graph_create(void);
+graph* shallow_graph_create(void);
