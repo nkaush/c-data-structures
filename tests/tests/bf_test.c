@@ -1,4 +1,4 @@
-#include "libs/bitfield.h"
+#include "bitfield.h"
 #include <stdlib.h>
 #include <time.h>
 

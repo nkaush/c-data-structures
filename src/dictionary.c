@@ -1,5 +1,5 @@
-#include "libs/dictionary.h"
-#include "libs/bitfield.h"
+#include "dictionary.h"
+#include "bitfield.h"
 #include <assert.h>
 
 #define NUM_PRIMES 38

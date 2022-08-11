@@ -1,4 +1,4 @@
-#include "libs/vector.h"
+#include "vector.h"
 #include <stdio.h>
 
 #define BOLDGREEN "\033[1m\033[32m"

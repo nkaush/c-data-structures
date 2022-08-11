@@ -1,4 +1,4 @@
-#include "libs/set.h"
+#include "set.h"
 
 #include <assert.h>
 #include <stdio.h>

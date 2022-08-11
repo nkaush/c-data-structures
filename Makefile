@@ -1,12 +1,13 @@
-OBJS_DIR     = .objs
-TEST_DIR     = tests
-SRC_DIR      = src
-APPS_DIR     = apps
-LIBS_DIR     = $(SRC_DIR)/libs
+OBJS_DIR = .objs
+SRC_DIR  = src
+APPS_DIR = apps
+TEST_DIR = tests
 
-EXE_SERVER = server
-EXE_CLIENT = client
-EXE_MAIN   = main
+APPS_SRC_FILES := $(wildcard $(APPS_DIR)/*.c)
+TEST_SRC_FILES := $(wildcard $(TEST_DIR)/*.c)
+
+EXE_APPS  := $(patsubst $(APPS_DIR)/%.c,%,$(APPS_SRC_FILES))
+EXE_TESTS := $(patsubst $(TEST_DIR)/%.c,%,$(TEST_SRC_FILES))
 
 # set up compiler and linker
 CC = clang
@@ -16,24 +17,14 @@ LD = clang
 WARNINGS = -Wall -Wextra -Werror -Wno-error=unused-parameter -Wmissing-declarations -Wmissing-variable-declarations
 INC = -I./includes/
 CFLAGS_COMMON = $(WARNINGS) $(INC) -std=c99 -c -MMD -MP -D_GNU_SOURCE
-CFLAGS_COMMON += -D__LOG_REQUESTS__
 CFLAGS_RELEASE = $(CFLAGS_COMMON) -O2
 CFLAGS_DEBUG = $(CFLAGS_COMMON) -O0 -g -DDEBUG -pg
 
-# CFLAGS_TRACE = $(CFLAGS_DEBUG) -pg
-# LDFLAGS_TRACE = $(CFLAGS_DEBUG) -pg
-
 # Find object files for libraries
-OBJS_LIBS:=$(patsubst $(LIBS_DIR)/%.c,%.o,$(wildcard $(LIBS_DIR)/*.c))
-OBJS_SRC :=$(patsubst $(SRC_DIR)/%.c,%.o,$(wildcard $(SRC_DIR)/*.c))
+OBJS_SRC := $(patsubst $(SRC_DIR)/%.c,%.o,$(wildcard $(SRC_DIR)/*.c))
 
-TEST_SRC_FILES:=$(wildcard $(TEST_DIR)/*.c)
-TEST_EXES:=$(patsubst $(TEST_DIR)/%.c,%,$(TEST_SRC_FILES))
-
-OBJS_CLIENT = $(EXE_CLIENT).o $(OBJS_SRC) $(OBJS_LIBS)
-OBJS_TEST   = $(OBJS_SRC) $(OBJS_LIBS)
-OBJS_SERVER = $(EXE_SERVER)_main.o $(OBJS_LIBS) $(OBJS_SRC)
-OBJS_MAIN   = $(EXE_MAIN).o $(OBJS_LIBS) route.o request.o response.o protocol.o format.o
+OBJS_APPS   = $(OBJS_SRC) 
+OBJS_TEST   = $(OBJS_SRC)
 
 .PHONY: all
 all: release
@@ -50,9 +41,9 @@ print:
 .PHONY: debug
 .PHONY: test
 
-release: $(EXE_CLIENT) $(EXE_SERVER) $(TEST_EXES) $(EXE_MAIN)
-debug:   clean $(EXE_SERVER)-debug
-test: 	 $(TEST_EXES)
+release: $(EXE_TESTS) $(EXE_MAIN)
+debug:   clean $(EXE_MAIN)-debug
+test: 	 $(EXE_TESTS)
 
 # include dependencies
 -include $(OBJS_DIR)/*.d
@@ -65,13 +56,6 @@ $(OBJS_DIR)/%-debug.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS_DEBUG) $< -o $@
 
 $(OBJS_DIR)/%-release.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS_RELEASE) $< -o $@
-
-# Define rules to compile object files for libraries
-$(OBJS_DIR)/%-debug.o: $(LIBS_DIR)/%.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS_DEBUG) $< -o $@
-
-$(OBJS_DIR)/%-release.o: $(LIBS_DIR)/%.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS_RELEASE) $< -o $@
 
 # Define rules to compile object files for apps
@@ -88,31 +72,28 @@ $(OBJS_DIR)/%-debug.o: $(TEST_DIR)/%.c | $(OBJS_DIR)
 ################################################################################
 #                          Rules to Link Executables                           #
 ################################################################################
-$(EXE_SERVER): $(OBJS_SERVER:%.o=$(OBJS_DIR)/%-release.o)
-	$(LD) $^ -o $@
-
-$(EXE_SERVER)-debug: $(OBJS_SERVER:%.o=$(OBJS_DIR)/%-debug.o)
-	$(LD) $^ $(LDFLAGS_DEBUG) -o $@
-
-$(EXE_CLIENT): $(OBJS_CLIENT:%.o=$(OBJS_DIR)/%-release.o)
-	$(LD) $^ -o $@
-
-$(EXE_CLIENT)-debug: $(OBJS_CLIENT:%.o=$(OBJS_DIR)/%-debug.o)
-	$(LD) $^ -o $@
-
 $(EXE_MAIN): $(OBJS_MAIN:%.o=$(OBJS_DIR)/%-debug.o)
 	$(LD) $^ -o $@
 
 # Rules to link test executables
-$(TEST_EXES): %: $(OBJS_DIR)/%-debug.o $(OBJS_TEST:%.o=$(OBJS_DIR)/%-debug.o)
+$(EXE_APPS): %: $(OBJS_DIR)/%-debug.o $(OBJS_:%.o=$(OBJS_DIR)/%-debug.o)
 	$(LD) $^ -o $(notdir $@)
+
+# Rules to link test executables
+$(EXE_TESTS): %: $(OBJS_DIR)/%-debug.o $(OBJS_TEST:%.o=$(OBJS_DIR)/%-debug.o)
+	$(LD) $^ -o $(notdir $@)
+
+################################################################################
+#                          Rules to Create Libraries                           #
+################################################################################
+
 
 ################################################################################
 #                              Bash Command Rules                              #
 ################################################################################
 .PHONY: clean
 clean:
-	rm -rf .objs $(TEST_EXES) $(EXE_CLIENT) $(EXE_SERVER) $(EXE_CLIENT)-debug $(EXE_SERVER)-debug $(EXE_MAIN)
+	rm -rf .objs $(EXE_TESTS) $(EXE_CLIENT) $(EXE_SERVER) $(EXE_CLIENT)-debug $(EXE_SERVER)-debug $(EXE_MAIN)
 
 build:
 	docker build -t neilk3/linux-dev-env .

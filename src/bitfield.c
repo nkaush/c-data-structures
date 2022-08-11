@@ -1,4 +1,4 @@
-#include "libs/bitfield.h"
+#include "bitfield.h"
 #include <assert.h>
 #include <stdlib.h>
 
