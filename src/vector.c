@@ -1,5 +1,6 @@
 #include "vector.h"
 #include <assert.h>
+#include <string.h>
 
 /**
  * 'INITIAL_CAPACITY' the initial size of the dynamically.

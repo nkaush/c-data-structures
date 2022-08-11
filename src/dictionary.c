@@ -157,7 +157,9 @@ bool dictionary_contains(dictionary* this, void* key) {
 }
 
 void* dictionary_get(dictionary* this, void* key) {
-    assert(dictionary_contains(this, key));
+    if ( !dictionary_contains(this, key) )
+        return NULL;
+
     return this->nodes[__dictionary_find_key(this, key)]->value;
 }
 
