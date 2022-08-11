@@ -1,5 +1,5 @@
 fmt = """set* {key_type}_set_create(void) {{
-    return dictionary_create(
+    return set_create(
         {key_type}_hash_function, {key_type}_compare,
         {key_type}_copy_constructor, {key_type}_destructor
     );

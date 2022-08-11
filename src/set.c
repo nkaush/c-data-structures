@@ -388,85 +388,86 @@ void set_shrink_to_fit(set* this) {
  */
 
 set* shallow_set_create(void) {
-    return dictionary_create(
+    return set_create(
         shallow_hash_function, shallow_compare,
         shallow_copy_constructor, shallow_destructor
     );
 }
 
 set* string_set_create(void) {
-    return dictionary_create(
+    return set_create(
         string_hash_function, string_compare,
         string_copy_constructor, string_destructor
     );
 }
 
 set* char_set_create(void) {
-    return dictionary_create(
+    return set_create(
         char_hash_function, char_compare,
         char_copy_constructor, char_destructor
     );
 }
 
 set* double_set_create(void) {
-    return dictionary_create(
+    return set_create(
         double_hash_function, double_compare,
         double_copy_constructor, double_destructor
     );
 }
 
 set* float_set_create(void) {
-    return dictionary_create(
+    return set_create(
         float_hash_function, float_compare,
         float_copy_constructor, float_destructor
     );
 }
 
 set* int_set_create(void) {
-    return dictionary_create(
+    return set_create(
         int_hash_function, int_compare,
         int_copy_constructor, int_destructor
     );
 }
 
 set* long_set_create(void) {
-    return dictionary_create(
+    return set_create(
         long_hash_function, long_compare,
         long_copy_constructor, long_destructor
     );
 }
 
 set* short_set_create(void) {
-    return dictionary_create(
+    return set_create(
         short_hash_function, short_compare,
         short_copy_constructor, short_destructor
     );
 }
 
 set* unsigned_char_set_create(void) {
-    return dictionary_create(
+    return set_create(
         unsigned_char_hash_function, unsigned_char_compare,
         unsigned_char_copy_constructor, unsigned_char_destructor
     );
 }
 
 set* unsigned_int_set_create(void) {
-    return dictionary_create(
+    return set_create(
         unsigned_int_hash_function, unsigned_int_compare,
         unsigned_int_copy_constructor, unsigned_int_destructor
     );
 }
 
 set* unsigned_long_set_create(void) {
-    return dictionary_create(
+    return set_create(
         unsigned_long_hash_function, unsigned_long_compare,
         unsigned_long_copy_constructor, unsigned_long_destructor
     );
 }
 
 set* unsigned_short_set_create(void) {
-    return dictionary_create(
+    return set_create(
         unsigned_short_hash_function, unsigned_short_compare,
         unsigned_short_copy_constructor, unsigned_short_destructor
     );
 }
+
