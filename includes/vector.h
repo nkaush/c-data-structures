@@ -66,6 +66,8 @@ vector *vector_create(copy_constructor_type copy_constructor,
                       destructor_type destructor,
                       default_constructor_type default_constructor);
 
+vector* vector_shallow_copy(vector* other);
+
 /**
  * Destroys all container elements by
  * calling on the user provided destructor for every element,
@@ -283,6 +285,34 @@ void vector_erase(vector *this, size_t position);
  * http://www.cplusplus.com/reference/vector/vector/clear/
  */
 void vector_clear(vector *this);
+
+/**
+ * Vector iteration macro. `vecname` is the name of the vector. `varname` is the 
+ * name of a temporary (local) variable to refer to each element in the set, and
+ * `callback` is a block of code that gets executed upon each element in the
+ * vector.
+ *
+ * Example usage:
+ * ```
+ *     vector* v = string_vector_create();
+ *     vector_push_back(v, "Hi!"); vector_push_back(v, "I'm");
+ *     vector_push_back(v, "Vector"); vector_push_back(v, "\n");
+ *     VECTOR_FOR_EACH(v, thing, {
+ *       fprintf("%s\n", (char*) thing);
+ *       if (!strcmp((char *) thing, "Vector")){
+ *         break;
+ *       }
+ *     });
+ * ```
+ */
+#define VECTOR_FOR_EACH(vecname, varname, callback)    \
+    do {                                               \
+        size_t _len = vector_size(vecname);            \
+        for (size_t _i = 0; _i < _len; ++_i) {         \
+            void *varname = vector_get(vecname, _i);   \
+            { callback; }                              \
+        }                                              \
+    } while (0)
 
 // The following is code generated:
 

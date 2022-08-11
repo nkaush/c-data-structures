@@ -90,13 +90,25 @@ vector *vector_create(copy_constructor_type copy_constructor,
 
     // allocate initial array filled with NULL pointers
     this->array = calloc(this->capacity, sizeof(void*));
-    for (size_t i = 0; i < this->capacity; ++i) {
-        this->array[i] = NULL;
-    }
 
     this->default_constructor = default_constructor;
     this->copy_constructor = copy_constructor;
     this->destructor = destructor;
+
+    return this;
+}
+
+vector* vector_shallow_copy(vector* other) {
+    vector* this = malloc(sizeof(vector));
+    this->capacity = other->size;
+    this->size = other->size;
+
+    this->array = calloc(this->size, sizeof(void*));
+    memcpy(this->array, other->array, this->size * sizeof(void*));
+
+    this->default_constructor = other->default_constructor;
+    this->copy_constructor = other->copy_constructor;
+    this->destructor = other->destructor;
 
     return this;
 }
