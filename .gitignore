@@ -1,5 +1,9 @@
+# IDE files
+.vscode
+
 # Executables
 main
+*_test
 
 # Prerequisites
 *.d
