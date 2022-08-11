@@ -72,11 +72,8 @@ $(OBJS_DIR)/%-debug.o: $(TEST_DIR)/%.c | $(OBJS_DIR)
 ################################################################################
 #                          Rules to Link Executables                           #
 ################################################################################
-$(EXE_MAIN): $(OBJS_MAIN:%.o=$(OBJS_DIR)/%-debug.o)
-	$(LD) $^ -o $@
-
 # Rules to link test executables
-$(EXE_APPS): %: $(OBJS_DIR)/%-debug.o $(OBJS_:%.o=$(OBJS_DIR)/%-debug.o)
+$(EXE_APPS): %: $(OBJS_DIR)/%-debug.o $(OBJS_APPS:%.o=$(OBJS_DIR)/%-debug.o)
 	$(LD) $^ -o $(notdir $@)
 
 # Rules to link test executables
@@ -93,25 +90,4 @@ $(EXE_TESTS): %: $(OBJS_DIR)/%-debug.o $(OBJS_TEST:%.o=$(OBJS_DIR)/%-debug.o)
 ################################################################################
 .PHONY: clean
 clean:
-	rm -rf .objs $(EXE_TESTS) $(EXE_CLIENT) $(EXE_SERVER) $(EXE_CLIENT)-debug $(EXE_SERVER)-debug $(EXE_MAIN)
-
-build:
-	docker build -t neilk3/linux-dev-env .
-
-build-release:
-	docker build -t neilk3/web-server -f Dockerfile.release .
-
-start: build
-	docker run -it --rm -p 80:8000 -v `pwd`:/mount neilk3/linux-dev-env
-
-start-release: build-release
-	docker run -it --rm -p 80:8000 -v `pwd`/favicon.png:/service/favicon.png neilk3/web-server
-
-trace: debug
-	sudo dtrace -s timing.d -c "./server-debug 80"
-
-valgrind: server-debug
-	valgrind --leak-check=full --show-leak-kinds=all ./server-debug 8000
-
-leaks: server-debug
-	export MallocStackLogging=1 && ./server-debug 80
+	rm -rf .objs $(EXE_TESTS) $(EXE_APPS)
