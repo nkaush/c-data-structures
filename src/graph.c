@@ -29,6 +29,7 @@ void* vertex_create(void* ptr) {
     graph_callbacks* cbs = (graph_callbacks*) ptr;
     vertex* v = malloc(sizeof(vertex));
     v->vertex_value_destructor = cbs->vertex_value_destructor;
+    v->value = NULL;
 
     v->antineighbors = set_create(
         cbs->vertex_hash_function, cbs->vertex_comp,
@@ -102,8 +103,7 @@ void graph_destroy(graph* this) {
 bool graph_adjacent(graph* this, void* s, void* t) {
     vertex* v = dictionary_get(this->vertices, s);
 
-    if ( !v )
-        return false;
+    if ( !v ) return false;
 
     return dictionary_contains(v->outbound_edges, t);
 }
@@ -111,8 +111,7 @@ bool graph_adjacent(graph* this, void* s, void* t) {
 vector* graph_neighbors(graph* this, void* s) {
     vertex* v = dictionary_get(this->vertices, s);
 
-    if ( !v )
-        return shallow_vector_create();
+    if ( !v ) return shallow_vector_create();
 
     return dictionary_keys(v->outbound_edges);;
 }
@@ -120,8 +119,7 @@ vector* graph_neighbors(graph* this, void* s) {
 vector* graph_antineighbors(graph* this, void* t) {
     vertex* v = dictionary_get(this->vertices, t);
 
-    if ( !v )
-        return shallow_vector_create();
+    if ( !v ) return shallow_vector_create();
 
     return set_elements(v->antineighbors);
 }
@@ -129,8 +127,7 @@ vector* graph_antineighbors(graph* this, void* t) {
 size_t graph_vertex_degree(graph* this, void* s) {
     vertex* v = dictionary_get(this->vertices, s);
 
-    if ( !v )
-        return 0;
+    if ( !v ) return 0;
     
     return dictionary_size(v->outbound_edges);
 }
@@ -138,8 +135,7 @@ size_t graph_vertex_degree(graph* this, void* s) {
 size_t graph_vertex_antidegree(graph* this, void* t) {
     vertex* v = dictionary_get(this->vertices, t);
 
-    if ( !v )
-        return 0;
+    if ( !v ) return 0;
     
     return set_cardinality(v->antineighbors);
 }

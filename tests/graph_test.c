@@ -41,133 +41,98 @@ TEST(test_graph_adjacent, {
     graph_destroy(g);
 })
 
-int test_graph_neighbors(void) {
-    int assertions_failed = 0;
+TEST(test_graph_neighbors, {
+    graph* g = string_graph_create();
 
-    
+    graph_add_vertex(g, "a");
+    graph_add_vertex(g, "b");
+    graph_add_vertex(g, "c");
 
-    return assertions_failed;
-}
+    graph_add_edge(g, "a", "b");
+    graph_add_edge(g, "a", "c");
+    graph_add_edge(g, "b", "c");
 
-int test_graph_antineighbors(void) {
-    int assertions_failed = 0;
+    vector* an = graph_neighbors(g, "a");
+    vector* bn = graph_neighbors(g, "b");
+    vector* cn = graph_neighbors(g, "c");
 
-    
+    ASSERT( vector_size(an) == 2 );
+    VECTOR_FOR_EACH(an, n, {
+        ASSERT( !strcmp((char*) n, "b") || !strcmp((char*) n, "c") );
+    });
 
-    return assertions_failed;
-}
+    ASSERT( vector_size(bn) == 1 );
+    VECTOR_FOR_EACH(bn, n, {
+        ASSERT( !strcmp((char*) n, "c") );
+    });
 
-int test_graph_vertex_degree(void) {
-    int assertions_failed = 0;
+    ASSERT( vector_size(cn) == 0 );
 
-    
+    vector_destroy(an);
+    vector_destroy(bn);
+    vector_destroy(cn);
+    graph_destroy(g);
+})
 
-    return assertions_failed;
-}
+TEST(test_graph_antineighbors, {
 
-int test_graph_vertex_antidegree(void) {
-    int assertions_failed = 0;
+})
 
-    
+TEST(test_graph_vertex_degree, {
 
-    return assertions_failed;
-}
+})
 
-int test_graph_vertices(void) {
-    int assertions_failed = 0;
+TEST(test_graph_vertex_antidegree, {
 
-    
+})
 
-    return assertions_failed;
-}
+TEST(test_graph_vertices, {
 
-int test_graph_vertex_count(void) {
-    int assertions_failed = 0;
+})
 
-    
+TEST(test_graph_vertex_count, {
 
-    return assertions_failed;
-}
+})
 
-int test_graph_contains_vertex(void) {
-    int assertions_failed = 0;
+TEST(test_graph_contains_vertex, {
 
-    
+})
 
-    return assertions_failed;
-}
+TEST(test_graph_add_vertex, {
 
-int test_graph_add_vertex(void) {
-    int assertions_failed = 0;
+})
 
-    
+TEST(test_graph_remove_vertex, {
 
-    return assertions_failed;
-}
+})
 
-int test_graph_remove_vertex(void) {
-    int assertions_failed = 0;
+TEST(test_graph_get_vertex_value, {
 
-    
+})
 
-    return assertions_failed;
-}
+TEST(test_graph_set_vertex_value, {
 
-int test_graph_get_vertex_value(void) {
-    int assertions_failed = 0;
+})
 
-    
+TEST(test_graph_edge_count, {
 
-    return assertions_failed;
-}
+})
 
-int test_graph_set_vertex_value(void) {
-    int assertions_failed = 0;
+TEST(test_graph_add_edge, {
 
-    
+})
 
-    return assertions_failed;
-}
+TEST(test_graph_remove_edge, {
 
-int test_graph_edge_count(void) {
-    int assertions_failed = 0;
+})
 
-    
+TEST(test_graph_get_edge_value, {
 
-    return assertions_failed;
-}
+})
 
-int test_graph_add_edge(void) {
-    int assertions_failed = 0;
+TEST(test_graph_set_edge_value, {
 
-    
-
-    return assertions_failed;
-}
-
-int test_graph_remove_edge(void) {
-    int assertions_failed = 0;
-
-    
-
-    return assertions_failed;
-}
-
-int test_graph_get_edge_value(void) {
-    int assertions_failed = 0;
-
-    
-
-    return assertions_failed;
-}
-
-int test_graph_set_edge_value(void) {
-    int assertions_failed = 0;
-
-    
-
-    return assertions_failed;
-}
+})
 
 #if defined(__APPLE__) && defined(DEBUG)
 #include <unistd.h>
@@ -214,4 +179,6 @@ int main(int argc, char** argv) {
     }
 
     printf("\n");
+
+    return return_code;
 }
