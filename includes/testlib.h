@@ -21,12 +21,13 @@
         return __assertions_failed__;               \
     }
 
-#define ASSERT(__condition__)                                    \
-    ++__num_assertions__;                                        \
-    if (!(__condition__)) {                                      \
-        if ( !__assertions_failed__ ) {                          \
-            printf(BOLDRED"FAILED\n"RESET);                      \
-        }                                                        \
-        printf("\t"BOLDRED"FAILED"RESET" %s\n", #__condition__); \
-        ++__assertions_failed__;                                 \
-    }
+#define ASSERT(__condition__) {                                      \
+        ++__num_assertions__;                                        \
+        if (!(__condition__)) {                                      \
+            if ( !__assertions_failed__ ) {                          \
+                printf(BOLDRED"FAILED\n"RESET);                      \
+            }                                                        \
+            printf("\t"BOLDRED"FAILED"RESET" [%s:%d] %s\n", __FILE__, __LINE__, #__condition__); \
+            ++__assertions_failed__;                                 \
+        }                                                            \
+    } while (0);

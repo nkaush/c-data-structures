@@ -111,6 +111,10 @@ LIB_QUEUE_OBJS = queue
 $(LIBS_DIR)/libqueue.a: $(LIB_QUEUE_OBJS:%=$(OBJS_DIR)/%-release.o)
 	ar rcs $@ $^
 
+LIB_DISJOINT_SETS_OBJS = disjoint_sets
+$(LIBS_DIR)/libdisjointsets.a: $(LIB_DISJOINT_SETS_OBJS:%=$(OBJS_DIR)/%-release.o)
+	ar rcs $@ $^
+
 ################################################################################
 #                              Bash Command Rules                              #
 ################################################################################
