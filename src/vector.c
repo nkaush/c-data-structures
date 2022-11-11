@@ -204,6 +204,16 @@ void vector_set(vector *this, size_t position, void *element) {
     }
 }
 
+void vector_swap(vector *this, size_t a, size_t b) {
+    assert(this);
+    assert(a < this->size);
+    assert(b < this->size);
+
+    void *tmp = this->array[a];
+    this->array[a] = this->array[b];
+    this->array[b] = tmp;
+}
+
 void *vector_get(vector *this, size_t position) {
     assert(this);
     assert(position < this->size);

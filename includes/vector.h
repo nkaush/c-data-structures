@@ -198,6 +198,8 @@ void **vector_at(vector *this, size_t n);
  */
 void vector_set(vector *this, size_t n, void *element);
 
+void vector_swap(vector *this, size_t a, size_t b);
+
 /**
  * Gets a reference to the 'element' at position 'n' in the 'vector'.
  */

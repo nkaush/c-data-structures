@@ -115,6 +115,10 @@ LIB_DISJOINT_SETS_OBJS = disjoint_sets
 $(LIBS_DIR)/libdisjointsets.a: $(LIB_DISJOINT_SETS_OBJS:%=$(OBJS_DIR)/%-release.o)
 	ar rcs $@ $^
 
+LIB_HEAP_OBJS = heap vector
+$(LIBS_DIR)/libheap.a: $(LIB_HEAP_OBJS:%=$(OBJS_DIR)/%-release.o)
+	ar rcs $@ $^
+
 ################################################################################
 #                              Bash Command Rules                              #
 ################################################################################
