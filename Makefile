@@ -4,7 +4,8 @@ APPS_DIR = apps
 TEST_DIR = tests
 LIBS_DIR = libs
 
-LIBS           := dictionary graph set vector queue
+LIBS           := dictionary graph set vector queue disjointsets heap
+LIBS_PTHREAD   := $(patsubst %,%-pthread,$(LIBS))
 APPS_SRC_FILES := $(wildcard $(APPS_DIR)/*.c)
 TEST_SRC_FILES := $(wildcard $(TEST_DIR)/*.c)
 
@@ -19,8 +20,10 @@ LD = clang
 WARNINGS = -Wall -Wextra -Werror -Wno-error=unused-parameter -Wmissing-declarations -Wmissing-variable-declarations
 INC = -I./includes/
 CFLAGS_COMMON = $(WARNINGS) $(INC) -std=c99 -c -MMD -MP -D_GNU_SOURCE
+
 CFLAGS_RELEASE = $(CFLAGS_COMMON) -O2
-CFLAGS_DEBUG = $(CFLAGS_COMMON) -O0 -g -DDEBUG 
+CFLAGS_PTHREAD = $(CFLAGS_COMMON) -O2 -pthread
+CFLAGS_DEBUG   = $(CFLAGS_COMMON) -O0 -g -DDEBUG 
 
 # Find object files for libraries
 OBJS_SRC := $(patsubst $(SRC_DIR)/%.c,%.o,$(wildcard $(SRC_DIR)/*.c))
@@ -41,14 +44,14 @@ $(LIBS_DIR):
 
 .PHONY: print 
 print:
-	echo $(OBJS_SRC)
+	echo $(LIBS:%=$(LIBS_DIR)/lib%.a)
 
 # build types
 .PHONY: release
 .PHONY: debug
 .PHONY: test
 
-release: $(LIBS_DIR) $(LIBS:%=$(LIBS_DIR)/lib%.a)
+release: $(LIBS_DIR) $(LIBS:%=$(LIBS_DIR)/lib%.a) $(LIBS_PTHREAD:%=$(LIBS_DIR)/lib%.a)
 main:    $(EXE_MAIN)
 debug:   clean $(EXE_MAIN)-debug
 test: 	 $(EXE_TESTS)
@@ -65,6 +68,9 @@ $(OBJS_DIR)/%-debug.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
 
 $(OBJS_DIR)/%-release.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
 	$(CC) $(CFLAGS_RELEASE) $< -o $@
+
+$(OBJS_DIR)/%-pthread.o: $(SRC_DIR)/%.c | $(OBJS_DIR)
+	$(CC) $(CFLAGS_PTHREAD) $< -o $@
 
 # Define rules to compile object files for apps
 $(OBJS_DIR)/%-debug.o: $(APPS_DIR)/%.c | $(OBJS_DIR)
@@ -117,6 +123,37 @@ $(LIBS_DIR)/libdisjointsets.a: $(LIB_DISJOINT_SETS_OBJS:%=$(OBJS_DIR)/%-release.
 
 LIB_HEAP_OBJS = heap vector
 $(LIBS_DIR)/libheap.a: $(LIB_HEAP_OBJS:%=$(OBJS_DIR)/%-release.o)
+	ar rcs $@ $^
+
+################################################################################
+#                 Rules to Create Pthread-Compatible Libraries                 #
+################################################################################
+LIB_DICT_OBJS = dictionary callbacks compare vector bitfield
+$(LIBS_DIR)/libdictionary-pthread.a: $(LIB_DICT_OBJS:%=$(OBJS_DIR)/%-pthread.o)
+	ar rcs $@ $^
+
+LIB_GRAPH_OBJS = graph vector callbacks compare dictionary set
+$(LIBS_DIR)/libgraph-pthread.a: $(LIB_GRAPH_OBJS:%=$(OBJS_DIR)/%-pthread.o)
+	ar rcs $@ $^
+
+LIB_SET_OBJS = set callbacks compare vector bitfield
+$(LIBS_DIR)/libset-pthread.a: $(LIB_SET_OBJS:%=$(OBJS_DIR)/%-pthread.o)
+	ar rcs $@ $^
+
+LIB_VECTOR_OBJS = vector callbacks
+$(LIBS_DIR)/libvector-pthread.a: $(LIB_VECTOR_OBJS:%=$(OBJS_DIR)/%-pthread.o)
+	ar rcs $@ $^
+
+LIB_QUEUE_OBJS = queue
+$(LIBS_DIR)/libqueue-pthread.a: $(LIB_QUEUE_OBJS:%=$(OBJS_DIR)/%-pthread.o)
+	ar rcs $@ $^
+
+LIB_DISJOINT_SETS_OBJS = disjoint_sets
+$(LIBS_DIR)/libdisjointsets-pthread.a: $(LIB_DISJOINT_SETS_OBJS:%=$(OBJS_DIR)/%-pthread.o)
+	ar rcs $@ $^
+
+LIB_HEAP_OBJS = heap vector
+$(LIBS_DIR)/libheap-pthread.a: $(LIB_HEAP_OBJS:%=$(OBJS_DIR)/%-pthread.o)
 	ar rcs $@ $^
 
 ################################################################################

@@ -90,6 +90,11 @@ set* set_create(hash_function_type hash_function,
                 destructor_type destructor) {
     set* this = malloc(sizeof(set));
 
+    if ( !hash_function )      hash_function = shallow_hash_function;
+    if ( !comp )               comp = shallow_compare;
+    if ( !copy_constructor )   copy_constructor = shallow_copy_constructor;
+    if ( !destructor )         destructor = shallow_destructor;
+
     this->copy_constructor = copy_constructor;
     this->hash = hash_function;
     this->destructor = destructor;

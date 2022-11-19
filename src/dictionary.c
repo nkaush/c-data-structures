@@ -95,6 +95,13 @@ dictionary* dictionary_create_with_capacity(
         destructor_type value_destructor) {
     dictionary* this = malloc(sizeof(dictionary));
 
+    if ( !hash_function )          hash_function = shallow_hash_function;
+    if ( !comp )                   comp = shallow_compare;
+    if ( !key_copy_constructor )   key_copy_constructor = shallow_copy_constructor;
+    if ( !key_destructor )         key_destructor = shallow_destructor;
+    if ( !value_copy_constructor ) value_copy_constructor = shallow_copy_constructor;
+    if ( !value_destructor )       value_destructor = shallow_destructor;
+
     this->size = 0;
     this->head = NULL;
     this->tail = NULL;
@@ -1476,4 +1483,3 @@ dictionary* unsigned_short_to_unsigned_short_dictionary_create(void) {
         unsigned_short_copy_constructor, unsigned_short_destructor
     );
 }
-

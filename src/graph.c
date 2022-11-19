@@ -76,6 +76,16 @@ graph* graph_create(hash_function_type vertex_hash_function,
                     copy_constructor_type edge_value_copy_constructor,
                     destructor_type edge_value_destructor) {
     graph* g = malloc(sizeof(graph));
+
+    if ( !vertex_hash_function )          vertex_hash_function = shallow_hash_function;
+    if ( !vertex_comp )                   vertex_comp = shallow_compare;
+    if ( !vertex_key_copy_constructor )   vertex_key_copy_constructor = shallow_copy_constructor;
+    if ( !vertex_key_destructor )         vertex_key_destructor = shallow_destructor;
+    if ( !vertex_value_copy_constructor ) vertex_value_copy_constructor = shallow_copy_constructor;
+    if ( !vertex_value_destructor )       vertex_value_destructor = shallow_destructor;
+    if ( !edge_value_copy_constructor )   edge_value_copy_constructor = shallow_copy_constructor;
+    if ( !edge_value_destructor )         edge_value_destructor = shallow_destructor;
+
     g->vertices = dictionary_create(
         vertex_hash_function, vertex_comp, vertex_key_copy_constructor, 
         vertex_key_destructor, vertex_create, vertex_destroy

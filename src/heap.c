@@ -107,7 +107,7 @@ bool heap_is_empty(heap *h) {
 
 vector* heap_to_shallow_vector(heap *h) {
     vector *v = shallow_vector_create();
-    VECTOR_FOR_EACH(v, e, {
+    VECTOR_FOR_EACH(h->elements, e, {
         vector_push_back(v, e);
     });
 
